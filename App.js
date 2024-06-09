@@ -27,7 +27,7 @@ export default function App() {
     </View>
   );
 }
-
+//entrega adelanto
 const styles = StyleSheet.create({
   container: {
     flex: 1,
