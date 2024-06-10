@@ -1,4 +1,3 @@
-// App.js
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import WelcomeScreen from './WelcomeScreen';
@@ -32,14 +31,14 @@ export default function App() {
     setScreen('welcome');
   };
 
-  const handleAddTask = (title) => {
-    const newTask = { id: tasks.length + 1, title };
-    setTasks([...tasks, newTask]);
+  const handleAddTask = (newTask) => {
+    const newTaskWithId = { ...newTask, id: tasks.length + 1 };
+    setTasks([...tasks, newTaskWithId]);
   };
 
-  const handleEditTask = (taskId, newTitle) => {
+  const handleEditTask = (taskId, updatedTask) => {
     const updatedTasks = tasks.map(task =>
-      task.id === taskId ? { ...task, title: newTitle } : task
+      task.id === taskId ? updatedTask : task
     );
     setTasks(updatedTasks);
   };

@@ -1,4 +1,4 @@
-//WelcomeScreen.jsx
+//**********WelcomeScreen.jsx
 
 import React from 'react';
 import { StyleSheet, View, Image, Button } from 'react-native';

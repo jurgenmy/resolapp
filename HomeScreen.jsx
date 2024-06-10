@@ -1,34 +1,54 @@
-// HomeScreen.jsx
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, FlatList, TextInput, Modal } from 'react-native';
+import { StyleSheet, View, Text, Button, FlatList, Modal, TextInput } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
 const HomeScreen = ({ tasks, onBack, onEditTask, onDeleteTask }) => {
   const [editedTask, setEditedTask] = useState(null);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
   const [editModalVisible, setEditModalVisible] = useState(false);
-
-  const handleEditTask = (task) => {
-    setEditedTask(task);
-    setNewTaskTitle(task.title);
-    setEditModalVisible(true);
-  };
-
-  const handleSaveTask = () => {
-    onEditTask(editedTask.id, newTaskTitle);
-    setEditModalVisible(false);
-  };
-
-  const handleDeleteTask = (taskId) => {
-    onDeleteTask(taskId);
-  };
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
+  const [editedResolution, setEditedResolution] = useState('');
+  const [editedStatus, setEditedStatus] = useState('');
 
   const renderItem = ({ item }) => (
     <View style={styles.taskItemContainer}>
-      <Text style={styles.taskItem}>{item.title}</Text>
-      <Button title="Editar" onPress={() => handleEditTask(item)} />
-      <Button title="Eliminar" onPress={() => handleDeleteTask(item.id)} />
+      <Text style={styles.taskItemTitle}>{item.title}</Text>
+      <Text style={styles.taskItemDescription}>{item.description}</Text>
+      <Text style={styles.taskItemResolution}>{item.resolution}</Text>
+      <Text style={styles.taskItemStatus}>{item.status}</Text>
+      <View style={styles.taskItemButtons}>
+        <Button title="Editar" onPress={() => handleEditTask(item)} />
+        <Button title="Eliminar" onPress={() => onDeleteTask(item.id)} />
+      </View>
     </View>
   );
+
+  const handleEditTask = (task) => {
+    setEditedTask(task);
+    setEditedTitle(task.title);
+    setEditedDescription(task.description);
+    setEditedResolution(task.resolution);
+    setEditedStatus(task.status);
+    setEditModalVisible(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editedTitle.trim()) {
+      alert('Por favor ingrese un título válido.');
+      return;
+    }
+
+    const updatedTask = {
+      ...editedTask,
+      title: editedTitle,
+      description: editedDescription,
+      resolution: editedResolution,
+      status: editedStatus,
+    };
+
+    onEditTask(updatedTask.id, updatedTask);
+    setEditModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +59,7 @@ const HomeScreen = ({ tasks, onBack, onEditTask, onDeleteTask }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />
-      {/* Modal de edición */}
+      {/* Modal para editar tarea */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -50,13 +70,34 @@ const HomeScreen = ({ tasks, onBack, onEditTask, onDeleteTask }) => {
           <View style={styles.modalContent}>
             <TextInput
               style={styles.input}
-              placeholder="Nuevo título de la tarea"
-              value={newTaskTitle}
-              onChangeText={setNewTaskTitle}
+              value={editedTitle}
+              onChangeText={setEditedTitle}
+              placeholder="Editar título de la tarea"
             />
+            <TextInput
+              style={styles.input}
+              value={editedDescription}
+              onChangeText={setEditedDescription}
+              placeholder="Editar descripción de la tarea"
+            />
+            <TextInput
+              style={styles.input}
+              value={editedResolution}
+              onChangeText={setEditedResolution}
+              placeholder="Editar resolución de la tarea"
+            />
+            <Picker
+              selectedValue={editedStatus}
+              style={styles.picker}
+              onValueChange={(itemValue) => setEditedStatus(itemValue)}
+            >
+              <Picker.Item label="En proceso" value="En proceso" />
+              <Picker.Item label="En espera" value="En espera" />
+              <Picker.Item label="Finalizada" value="Finalizada" />
+            </Picker>
             <View style={styles.modalButtons}>
               <Button title="Cancelar" onPress={() => setEditModalVisible(false)} />
-              <Button title="Guardar" onPress={handleSaveTask} />
+              <Button title="Guardar" onPress={handleSaveEdit} />
             </View>
           </View>
         </View>
@@ -68,22 +109,40 @@ const HomeScreen = ({ tasks, onBack, onEditTask, onDeleteTask }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    textAlign: 'center',
+    marginBottom: 16,
   },
   taskItemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
-  taskItem: {
-    fontSize: 16,
-    marginRight: 10,
+  taskItemTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  taskItemDescription: {
+    fontSize: 14,
+    color: '#666',
+  },
+  taskItemResolution: {
+    fontSize: 14,
+    color: '#666',
+  },
+  taskItemStatus: {
+    fontSize: 14,
+    color: '#666',
+  },
+  taskItemButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
   },
   modalContainer: {
     flex: 1,
@@ -95,18 +154,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
-    elevation: 5,
+    width: '80%',
   },
   input: {
-    marginBottom: 10,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
+    marginBottom: 10,
     paddingHorizontal: 10,
+    width: '100%',
+  },
+  picker: {
+    height: 40,
+    width: '100%',
+    marginBottom: 10,
   },
   modalButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
 });
 
