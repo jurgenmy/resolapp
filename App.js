@@ -1,14 +1,19 @@
+// App.js
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import WelcomeScreen from './WelcomeScreen';
 import SignIn from './SignIn';
 import LogIn from './LogIn';
+import HomeScreen from './HomeScreen';
+import AddTask from './AddTask';
 
 const users = [];
+const initialTasks = [];
 
 export default function App() {
   const [screen, setScreen] = useState('welcome');
   const [currentUser, setCurrentUser] = useState(null);
+  const [tasks, setTasks] = useState(initialTasks);
 
   const handleLogin = (user) => {
     setCurrentUser(user);
@@ -27,8 +32,21 @@ export default function App() {
     setScreen('welcome');
   };
 
-  const handleBackToHome = () => {
-    setScreen('home');
+  const handleAddTask = (title) => {
+    const newTask = { id: tasks.length + 1, title };
+    setTasks([...tasks, newTask]);
+  };
+
+  const handleEditTask = (taskId, newTitle) => {
+    const updatedTasks = tasks.map(task =>
+      task.id === taskId ? { ...task, title: newTitle } : task
+    );
+    setTasks(updatedTasks);
+  };
+
+  const handleDeleteTask = (taskId) => {
+    const updatedTasks = tasks.filter(task => task.id !== taskId);
+    setTasks(updatedTasks);
   };
 
   return (
@@ -52,8 +70,13 @@ export default function App() {
       )}
       {screen === 'home' && (
         <View style={styles.homeContainer}>
-          <Text style={styles.homeText}>Esto sería el home</Text>
-          <Button title="Atrás" onPress={handleBackToWelcome} />
+          <HomeScreen
+            tasks={tasks}
+            onBack={handleBackToWelcome}
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+          />
+          <AddTask onAddTask={handleAddTask} />
         </View>
       )}
     </View>
@@ -69,15 +92,8 @@ const styles = StyleSheet.create({
   },
   homeContainer: {
     flex: 1,
-    backgroundColor: '#D3D3D3',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  homeText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#000',
-    textDecorationLine: 'underline',
-    textDecorationColor: 'red',
+    marginTop: 20,
   },
 });
