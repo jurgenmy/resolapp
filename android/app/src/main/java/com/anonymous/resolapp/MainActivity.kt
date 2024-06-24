@@ -1,4 +1,4 @@
-package com.anonymous.resolapp
+package com.anonymous.ResolApp
 
 import android.os.Build
 import android.os.Bundle

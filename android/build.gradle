@@ -1,6 +1,7 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
+
+
+    
     ext {
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '34.0.0'
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '23')
@@ -15,16 +16,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle')
+        classpath('com.android.tools.build:gradle:7.4.2')
         classpath('com.facebook.react:react-native-gradle-plugin')
         classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
         classpath('com.google.gms:google-services:4.4.1')
-      //  implementation("com.google.firebase:firebase-auth")
     }
 }
-
-apply plugin: "com.facebook.react.rootproject"
-apply plugin: 'com.google.gms.google-services'
 
 allprojects {
     repositories {
@@ -42,3 +39,5 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+apply plugin: "com.facebook.react.rootproject"
+apply plugin: 'com.google.gms.google-services'
