@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "814626250348",
+    "firebase_url": "https://resolapp-687be-default-rtdb.firebaseio.com",
+    "project_id": "resolapp-687be",
+    "storage_bucket": "resolapp-687be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814626250348:android:a74303f77bd36413850249",
+        "android_client_info": {
+          "package_name": "com.anonymous.ResolApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvMGFo2iGMBqI_ZxRCMfJvtd01XWo2elE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
